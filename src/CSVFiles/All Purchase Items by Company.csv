@@ -1,0 +1,3 @@
+Company,Purchase Order,Supplier,Lot #,Item/Product - SKU#,Type of measure,Order Count,Receive Count,Unit Price,Gross Weight,Pallets,Total Price,Image,Storage Location,Landed Cost
+TSI Tropicals,LHI-PO-000964,,2618,GOLDEN DRAGON 4.5KG - SKU#PIT000,Case,500,500,23.50,,5.00,15392.50,,"Warehouse: Main, Cooler Main Storage Location, Rack #null, Row #null, Position #null",31.48
+TSI Tropicals,LHI-PO-000964,,2618,Ecuador Granadilla 2KG - SKU#GRA020,Case,450,450,14.00,,3.00,8253.00,,"Warehouse: Main, Cooler Main Storage Location, Rack #null, Row #null, Position #null",18.80

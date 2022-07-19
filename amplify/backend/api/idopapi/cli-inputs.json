@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "paths": {
+    "/accessToken": {
+      "name": "/accessToken",
+      "lambdaFunction": "getAccessToken",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/accessTokenZS": {
+      "name": "/accessTokenZS",
+      "lambdaFunction": "getAccessTokenZS",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/createWorkBook": {
+      "name": "/createWorkBook",
+      "lambdaFunction": "createWorkBook",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/InsertColumnsZS": {
+      "name": "/InsertColumnsZS",
+      "lambdaFunction": "insertColumns",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

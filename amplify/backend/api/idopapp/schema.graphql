@@ -1,0 +1,248 @@
+type PickedItems @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  lot_number: Int
+  typeMeasure: String
+  pick_count: Float
+  unity: String
+  take_pieces: Boolean
+  companyID: ID! @index(name: "byCompany")
+  itemID: ID! @index(name: "byItem")
+  storagelocationID: ID! @index(name: "byStorageLocation")
+  saleorderID: ID! @index(name: "bySaleOrder")
+}
+
+type SaleOrderItem @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  ooa: Boolean
+  typeMeasure: String
+  sell_count: Float
+  unit_price: Float
+  total_price: Float
+  product_info: AWSJSON
+  unity: String
+  itemID: ID! @index(name: "byItem")
+  companyID: ID! @index(name: "byCompany")
+  saleorderID: ID! @index(name: "bySaleOrder")
+}
+
+type SaleOrder @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  invoice_date: AWSDate
+  invoice_number: String
+  purchase_number: String
+  confirmation_number: String
+  status: String
+  sale_comments: String
+  items_total: Float
+  delivery_type: String
+  charge: Float
+  total: Float
+  flag_complete: Boolean
+  radio_picking_to: String
+  radio_ready_to: String
+  companyID: ID! @index(name: "byCompany")
+  customerID: ID! @index(name: "byCustomer")
+  shippingaddressID: ID @index(name: "byShippingAddress")
+  billingaddressID: ID @index(name: "byBillingAddress")
+  SO_SOitem: [SaleOrderItem] @hasMany(indexName: "bySaleOrder", fields: ["id"])
+  shipment_info: AWSJSON
+  Sale_PickedItems: [PickedItems] @hasMany(indexName: "bySaleOrder", fields: ["id"])
+  userID: ID @index(name: "byUser")
+  bill_id_zb: String
+}
+
+type ItemLocation @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  lot_number: Int
+  cases: Int
+  cases_2: Int
+  units: Float
+  pieces_weight: Float
+  companyID: ID! @index(name: "byCompany")
+  itemID: ID! @index(name: "byItem")
+  storagelocationID: ID! @index(name: "byStorageLocation")
+  default: Boolean
+}
+
+type StorageLocation @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  storage_type: String
+  storage_name: String
+  rack: Int
+  row: Int
+  position: Int
+  warehouseID: ID! @index(name: "byWarehouse")
+  storage_itemLocation: [ItemLocation] @hasMany(indexName: "byStorageLocation", fields: ["id"])
+  companyID: ID! @index(name: "byCompany")
+  Storage_POItems: [PurchaseOrderItems] @hasMany(indexName: "byStorageLocation", fields: ["id"])
+  Storage_PickedItems: [PickedItems] @hasMany(indexName: "byStorageLocation", fields: ["id"])
+}
+
+type Warehouse @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  warehouse_name: String
+  phone: String
+  address: AWSJSON
+  companyID: ID! @index(name: "byCompany")
+  warehouse_storageLocation: [StorageLocation] @hasMany(indexName: "byWarehouse", fields: ["id"])
+}
+
+type PurchaseOrderItems @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  lot_number: Int
+  typeMeasure: String
+  quantityorder: Float
+  quantityreceipt: Float
+  unit_price: Float
+  grossWeight: Float
+  quantityPallets: Float
+  pricetotal: Float
+  landedCost: Float
+  purchaseorderID: ID! @index(name: "byPurchaseOrder")
+  itemID: ID! @index(name: "byItem")
+  companyID: ID! @index(name: "byCompany")
+  storagelocationID: ID @index(name: "byStorageLocation")
+}
+
+type PurchaseOrder @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  po_date: AWSDate
+  po_number: String
+  transport_type: String
+  bol_invoice_number: String
+  status: String
+  exchange_rate: Float
+  exchange_rate_date: AWSDate
+  order_type: String
+  flag_complete: Boolean
+  PO_POitems: [PurchaseOrderItems] @hasMany(indexName: "byPurchaseOrder", fields: ["id"])
+  companyID: ID! @index(name: "byCompany")
+  supplierID: ID! @index(name: "bySupplier")
+  PurchaseOrderRates: AWSJSON
+  PurchaseOrderCharges: AWSJSON
+  ChangeCurrency: AWSJSON
+  totals: AWSJSON
+  Inspection: AWSJSON
+  userID: ID @index(name: "byUser")
+  bill_id_zb: String
+  bill_info: AWSJSON
+}
+
+type Item @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  sku: String
+  supplier_code: String
+  description: String
+  cost: Float
+  type: String
+  plu: String
+  zb_item_id: String
+  units_per_case: Int
+  cases_per_pallet: Int
+  item_weight: Float
+  unity: String
+  companyID: ID! @index(name: "byCompany")
+  supplierID: ID! @index(name: "bySupplier")
+  item_POitems: [PurchaseOrderItems] @hasMany(indexName: "byItem", fields: ["id"])
+  item_itemLocation: [ItemLocation] @hasMany(indexName: "byItem", fields: ["id"])
+  item_SOitem: [SaleOrderItem] @hasMany(indexName: "byItem", fields: ["id"])
+  zb_convert_weight: Boolean
+  Item_PickedItems: [PickedItems] @hasMany(indexName: "byItem", fields: ["id"])
+}
+
+type Supplier @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  short_name: String
+  phone: String
+  purchasing_email: AWSEmail
+  zb_contact_id: String
+  Supplier_BillingA: [BillingAddress] @hasMany(indexName: "bySupplier", fields: ["id"])
+  Supplier_ShippingA: [ShippingAddress] @hasMany(indexName: "bySupplier", fields: ["id"])
+  companyID: ID! @index(name: "byCompany")
+  supplier_PO: [PurchaseOrder] @hasMany(indexName: "bySupplier", fields: ["id"])
+  supplier_item: [Item] @hasMany(indexName: "bySupplier", fields: ["id"])
+}
+
+type BillingAddress @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  address_line1: String
+  address_line2: String
+  city_district: String
+  state_province: String
+  postal_code: String
+  country: String
+  customerID: ID @index(name: "byCustomer")
+  supplierID: ID @index(name: "bySupplier")
+  BillingA_SaleOrder: [SaleOrder] @hasMany(indexName: "byBillingAddress", fields: ["id"])
+}
+
+type ShippingAddress @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  address_line1: String
+  address_line2: String
+  city_district: String
+  state_province: String
+  postal_code: String
+  country: String
+  customerID: ID @index(name: "byCustomer")
+  supplierID: ID @index(name: "bySupplier")
+  shippingA_saleorder: [SaleOrder] @hasMany(indexName: "byShippingAddress", fields: ["id"])
+}
+
+type Customer @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  company_name: String
+  name: String
+  phone: String
+  email: AWSEmail
+  Customer_BillingA: [BillingAddress] @hasMany(indexName: "byCustomer", fields: ["id"])
+  Customer_ShippingA: [ShippingAddress] @hasMany(indexName: "byCustomer", fields: ["id"])
+  companyID: ID! @index(name: "byCompany")
+  customer_saleOrder: [SaleOrder] @hasMany(indexName: "byCustomer", fields: ["id"])
+  zb_contact_id: String
+}
+
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  last_name: String
+  phone: String
+  status: String
+  companyID: ID! @index(name: "byCompany")
+  email: AWSEmail
+  User_SaleOrder: [SaleOrder] @hasMany(indexName: "byUser", fields: ["id"])
+  User_PurchaseOrder: [PurchaseOrder] @hasMany(indexName: "byUser", fields: ["id"])
+}
+
+type Company @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  company_name: String
+  company_code: String
+  company_address: AWSJSON
+  company_email: AWSEmail
+  company_phone: String
+  purchasing_count: Int
+  invoice_count: Int
+  scrap_count: Int
+  serial_reference: Int
+  extension_digit: Int
+  zb_organization_id: String
+  zb_refresh_token: String
+  zb_client_id: String
+  zb_client_secret: String
+  Company_User: [User] @hasMany(indexName: "byCompany", fields: ["id"])
+  Company_Customer: [Customer] @hasMany(indexName: "byCompany", fields: ["id"])
+  company_supplier: [Supplier] @hasMany(indexName: "byCompany", fields: ["id"])
+  company_item: [Item] @hasMany(indexName: "byCompany", fields: ["id"])
+  company_PO: [PurchaseOrder] @hasMany(indexName: "byCompany", fields: ["id"])
+  company_warehouse: [Warehouse] @hasMany(indexName: "byCompany", fields: ["id"])
+  company_itemLocation: [ItemLocation] @hasMany(indexName: "byCompany", fields: ["id"])
+  company_saleOrder: [SaleOrder] @hasMany(indexName: "byCompany", fields: ["id"])
+  company_SOitem: [SaleOrderItem] @hasMany(indexName: "byCompany", fields: ["id"])
+  Company_StorageLoc: [StorageLocation] @hasMany(indexName: "byCompany", fields: ["id"])
+  Company_POItems: [PurchaseOrderItems] @hasMany(indexName: "byCompany", fields: ["id"])
+  Company_PickedItems: [PickedItems] @hasMany(indexName: "byCompany", fields: ["id"])
+}
+ 

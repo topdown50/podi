@@ -1,0 +1,38 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-idopapp-staging-11355-authRole",
+      "UnauthRoleArn": "arn:aws:iam::482352306580:role/amplify-idopapp-staging-11355-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::482352306580:role/amplify-idopapp-staging-11355-authRole",
+      "Region": "ca-central-1",
+      "DeploymentBucketName": "amplify-idopapp-staging-11355-deployment",
+      "UnauthRoleName": "amplify-idopapp-staging-11355-unauthRole",
+      "StackName": "amplify-idopapp-staging-11355",
+      "StackId": "arn:aws:cloudformation:ca-central-1:482352306580:stack/amplify-idopapp-staging-11355/3024fb30-c4fe-11ec-b516-0e46970c184a",
+      "AmplifyAppId": "d22p9iajoyoau4"
+    },
+    "categories": {
+      "auth": {
+        "idopapp": {}
+      },
+      "function": {
+        "getAccessToken": {
+          "deploymentBucketName": "amplify-idopapp-staging-11355-deployment",
+          "s3Key": "amplify-builds/getAccessToken-70556d497039325a3738-build.zip"
+        },
+        "getAccessTokenZS": {
+          "deploymentBucketName": "amplify-idopapp-staging-11355-deployment",
+          "s3Key": "amplify-builds/getAccessTokenZS-4c3671585863357a5346-build.zip"
+        },
+        "createWorkBook": {
+          "deploymentBucketName": "amplify-idopapp-staging-11355-deployment",
+          "s3Key": "amplify-builds/createWorkBook-6a51783946634b34625a-build.zip"
+        },
+        "insertColumns": {
+          "deploymentBucketName": "amplify-idopapp-staging-11355-deployment",
+          "s3Key": "amplify-builds/insertColumns-386a635647306f517152-build.zip"
+        }
+      }
+    }
+  }
+}
